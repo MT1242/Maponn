@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&display=swap");
 
 :root {
-  --primary-color: #2bff00;
+  --primary-color: #00FF11;
   --secondary-color: #6c757d;
   --text-color: rgb(0, 0, 0);
 }
@@ -57,10 +57,20 @@ a:hover {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100%; /* Đảm bảo full chiều rộng */
+  max-width: 100%; /* Giới hạn tối đa là 100% */
   z-index: 1;
   padding: 10px 20px;
+  transition: left 0.3s ease; /* Hiệu ứng mượt khi di chuyển */
+  box-sizing: border-box; /* Tránh tràn do padding */
 }
+
+
+/* Khi sidebar mở, đẩy Information Bar sang phải */
+body.sidebar-open .information-bar {
+  left: 200px; /* Lùi vào đúng chiều rộng sidebar */
+}
+
 
 /* ======= Search Box ======= */
 .search-box {
@@ -118,7 +128,8 @@ a:hover {
 .user-box {
   display: flex;
   align-items: center;
-  margin-right: 30px;
+  margin-left: auto;
+  margin-right: 0px;
   position: relative;
 }
 

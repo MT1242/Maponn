@@ -28,13 +28,14 @@
 <body class="h-screen w-screen overflow-hidden">
     <div class="relative h-full w-full">
         <!-- Bản đồ -->
-        <div id="map" class="absolute inset-0 w-full h-full"></div>
+        <!-- <div id="map" class="absolute inset-0 w-full h-full"></div> -->
 
         <!-- Sidebar -->
         <div id="sidebar" class="small-sidebar">
             <div class="p-4 space-y-4" id="sidebar-content">
                 <div class="flex items-center space-x-2 cursor-pointer" id="menuToggle">
-                  <a href="index.html">  <img src="/img/logo.jpg" class="logo" alt="logo"></a>
+                    <a href="index.html">  <img src="/img/logo.jpg" class="logo" alt="logo"></a>
+
                     <span class="text-lg font-semibold ml-5 w-20">Số Hóa Vùng Trồng</span>
                 </div>
                 <div class="h-px w-full bg-gray-300"></div>
@@ -69,27 +70,52 @@
         </div>
 
         <!-- User Box -->
-        <!-- <div class="user-box">
+        <div class="user-box">
             <div class="user-avatar" onclick="toggleUserMenu()">
                 <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?t=st=1741849444~exp=1741853044~hmac=a9936963a52373ab381f0ef1f3d5d4512120db1ab4f7dae17129450acbde7d02&w=740"
                     alt="Avatar" class="avatar">
             </div>
             <div class="user-detail" id="userMenu">
                 <div class="user-setting">
-                    <a href="/profile.html"><i class="fa fa-user-secret"></i> Profile</a>
+                    <a href="#"><i class="fa fa-user-secret"></i> Profile</a>
                 </div>
                 <div class="user-setting">
                     <i class="fa fa-sign-in"></i> Sign in
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
 
-    <!-- Map Controls -->
-    <div class="map-controls">
-        <button class="btn" id="locate"><i class="fas fa-crosshairs"></i></button>
-        <button class="btn" id="zoom-in"><i class="fas fa-plus"></i></button>
-        <button class="btn" id="zoom-out"><i class="fas fa-minus"></i></button>
+    <!-- Nội dung thông tin người dùng -->
+    <div class="ml-64 p-8">
+        <h1 class="text-3xl font-bold mb-6">Thông Tin Người Dùng</h1>
+        <div class="bg-white shadow-lg rounded-lg p-6 max-w-lg">
+            <div class="flex items-center mb-4">
+                <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?w=740"
+                    alt="Avatar" class="w-20 h-20 rounded-full">
+                <div class="ml-4">
+                    <h2 class="text-xl font-semibold">Nguyễn Văn A</h2>
+                    <p class="text-gray-600">nguyenvana@example.com</p>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <div class="flex items-center">
+                    <i class="fas fa-phone-alt text-gray-500 w-6"></i>
+                    <span class="ml-2">+84 123 456 789</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-map-marker-alt text-gray-500 w-6"></i>
+                    <span class="ml-2">123 Đường ABC, Quận XYZ, TP.HCM</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-birthday-cake text-gray-500 w-6"></i>
+                    <span class="ml-2">01/01/1990</span>
+                </div>
+            </div>
+            <div class="mt-6 text-right">
+                <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Chỉnh Sửa</button>
+            </div>
+        </div>
     </div>
 
     <!-- Leaflet JS -->

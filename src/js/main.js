@@ -1,7 +1,6 @@
 const menuButton = document.getElementById("menuButton");
 const menuToggle = document.getElementById("menuToggle");
 const sidebar = document.getElementById("sidebar");
-const sidebarCollapsed = document.getElementById("sidebarCollapsed");
 const userMenu = document.getElementById("userMenu");
 const locateButton = document.getElementById("locate");
 const zoomInButton = document.getElementById("zoom-in");
@@ -18,16 +17,24 @@ const map = new maplibregl.Map({
 // Marker for current location
 let userMarker = null;
 
-// Toggle Sidebar
+// ====== Sidebar luôn đóng khi mở lại trang ======
+document.addEventListener("DOMContentLoaded", () => {
+  // Đảm bảo sidebar luôn đóng khi tải lại trang
+  sidebar.classList.add("-translate-x-full");
+  getCurrentLocation(true);
+});
+
+// ====== Toggle Sidebar ======
 const toggleSidebar = () => {
   const isCollapsed = sidebar.classList.toggle("-translate-x-full");
   sidebarCollapsed.classList.toggle("hidden", !isCollapsed);
 };
 
+// Add click event cho menu
 menuButton.addEventListener("click", toggleSidebar);
 menuToggle.addEventListener("click", toggleSidebar);
 
-// Toggle User Menu
+// ====== Toggle User Menu ======
 function toggleUserMenu() {
   userMenu.classList.toggle("show");
 }
@@ -39,7 +46,7 @@ window.onclick = (event) => {
   }
 };
 
-// Get Current Location and Show on Map
+// ====== Get Current Location and Show on Map ======
 function getCurrentLocation(centerOnly = true) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -67,10 +74,7 @@ function getCurrentLocation(centerOnly = true) {
   }
 }
 
-// Automatically center map on load
-document.addEventListener("DOMContentLoaded", () => getCurrentLocation(true));
-
-// Attach Event Listener
+// ====== Attach Event Listeners ======
 locateButton.addEventListener("click", () => getCurrentLocation(true));
 zoomInButton.addEventListener("click", () => map.zoomIn());
 zoomOutButton.addEventListener("click", () => map.zoomOut());

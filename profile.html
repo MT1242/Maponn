@@ -1,128 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Google Maps Clone</title>
-    <link rel="icon" type="image/x-icon" href="/img/logo.jpg">
+    <link rel="icon" type="image/x-icon" href="/img/logo.jpg" />
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Bootstrap 5 CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
-
-    <!-- Font Awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- MapLibre GL CSS & JS -->
-    <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet">
-    <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://js.api.here.com/v3/3.1/mapsjs-ui.css"
+    />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/src/css/style.css">
-</head>
+    <link rel="stylesheet" href="/src/css/style.css" />
+  </head>
 
-<body class="h-screen w-screen overflow-hidden">
-    <div class="relative h-full w-full">
-        <!-- Bản đồ -->
-        <!-- <div id="map" class="absolute inset-0 w-full h-full"></div> -->
+  <body class="h-screen w-screen overflow-hidden">
+    <div id="map" style="width: 100%; height: 500px"></div>
 
-        <!-- Sidebar -->
-        <div id="sidebar" class="small-sidebar">
-            <div class="p-4 space-y-4" id="sidebar-content">
-                <div class="flex items-center space-x-2 cursor-pointer" id="menuToggle">
-                    <a href="index.html">  <img src="/img/logo.jpg" class="logo" alt="logo"></a>
+    <script>
+      // Thay YOUR_API_KEY bằng API Key của bạn từ HERE
+      var platform = new H.service.Platform({
+        apikey: "QYPopTQhjQttlIWD-fe16IJ1ESMyb7xPLQrxJOr4EVE",
+      });
 
-                    <span class="text-lg font-semibold ml-5 w-20">Số Hóa Vùng Trồng</span>
-                </div>
-                <div class="h-px w-full bg-gray-300"></div>
-                <div class="space-y-2">
-                    <div class="flex items-center pt-4 space-x-2">
-                        <i class="fa fa-id-card-o"></i>
-                        <a class="text-sm" href="#">Tin tức nông nghiệp</a>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-seedling text-xl"></i>
-                        <a class="text-sm" href="#">Kĩ Thuật Canh Tác</a>
-                    </div>
-                    <div class="h-px w-full bg-gray-300"></div>
-                    <div class="flex items-center space-x-2">
-                        <i class="fa fa-commenting-o"></i>
-                        <a class="text-sm" href="#">Trao đổi với chuyên gia</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+      // Tạo một layer bản đồ
+      var defaultLayers = platform.createDefaultLayers();
 
-    <!-- Thanh thông tin -->
-    <div class="information-bar">
-        <!-- Search Box -->
-        <div class="search-box">
-            <div class="form-group has-search">
-                <i class="fas fa-bars text-xl" id="menuButton"></i>
-                <input type="text" class="form-control" placeholder="Tìm kiếm vùng trồng">
-                <span class="fa fa-search form-control-feedback"></span>
-            </div>
-        </div>
+      // Khởi tạo bản đồ trong <div id="map">
+      var map = new H.Map(
+        document.getElementById("map"),
+        defaultLayers.vector.normal.map,
+        {
+          zoom: 10,
+          center: { lat: 21.0285, lng: 105.8544 }, // Hà Nội
+        }
+      );
 
-        <!-- User Box -->
-        <div class="user-box">
-            <div class="user-avatar" onclick="toggleUserMenu()">
-                <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?t=st=1741849444~exp=1741853044~hmac=a9936963a52373ab381f0ef1f3d5d4512120db1ab4f7dae17129450acbde7d02&w=740"
-                    alt="Avatar" class="avatar">
-            </div>
-            <div class="user-detail" id="userMenu">
-                <div class="user-setting">
-                    <a href="#"><i class="fa fa-user-secret"></i> Profile</a>
-                </div>
-                <div class="user-setting">
-                    <i class="fa fa-sign-in"></i> Sign in
-                </div>
-            </div>
-        </div>
-    </div>
+      // Cho phép zoom và kéo bản đồ bằng chuột
+      var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
-    <!-- Nội dung thông tin người dùng -->
-    <div class="ml-64 p-8">
-        <h1 class="text-3xl font-bold mb-6">Thông Tin Người Dùng</h1>
-        <div class="bg-white shadow-lg rounded-lg p-6 max-w-lg">
-            <div class="flex items-center mb-4">
-                <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?w=740"
-                    alt="Avatar" class="w-20 h-20 rounded-full">
-                <div class="ml-4">
-                    <h2 class="text-xl font-semibold">Nguyễn Văn A</h2>
-                    <p class="text-gray-600">nguyenvana@example.com</p>
-                </div>
-            </div>
-            <div class="space-y-2">
-                <div class="flex items-center">
-                    <i class="fas fa-phone-alt text-gray-500 w-6"></i>
-                    <span class="ml-2">+84 123 456 789</span>
-                </div>
-                <div class="flex items-center">
-                    <i class="fas fa-map-marker-alt text-gray-500 w-6"></i>
-                    <span class="ml-2">123 Đường ABC, Quận XYZ, TP.HCM</span>
-                </div>
-                <div class="flex items-center">
-                    <i class="fas fa-birthday-cake text-gray-500 w-6"></i>
-                    <span class="ml-2">01/01/1990</span>
-                </div>
-            </div>
-            <div class="mt-6 text-right">
-                <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Chỉnh Sửa</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+      // Thêm UI điều khiển
+      var ui = H.ui.UI.createDefault(map, defaultLayers);
+    </script>
 
     <!-- Custom JS -->
     <script src="/src/js/main.js"></script>
-</body>
-
+  </body>
 </html>

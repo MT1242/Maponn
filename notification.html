@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thông báo</title>
+    <title>Thông báo đẹp</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
         #notification {
             display: none;
             position: fixed;
@@ -12,26 +15,56 @@
             right: 20px;
             background: #4CAF50;
             color: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             font-size: 16px;
+            max-width: 300px;
+            animation: slideIn 0.3s ease-out;
+        }
+        #progress-bar {
+            height: 4px;
+            background: #fff;
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 2px;
+            animation: progressBar 3s linear forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes progressBar {
+            from { width: 100%; }
+            to { width: 0%; }
         }
     </style>
 </head>
 <body>
 
-<button onclick="showNotification('Đây là thông báo!')">Hiện Thông Báo</button>
+<button onclick="showNotification('Thành công! Dữ liệu đã được lưu.')">Hiện Thông Báo</button>
 
-<div id="notification"></div>
+<div id="notification">
+    <span id="notification-message"></span>
+    <div id="progress-bar"></div>
+</div>
 
 <script>
     function showNotification(message, duration = 3000) {
         const notification = document.getElementById('notification');
-        notification.textContent = message;
+        const messageElement = document.getElementById('notification-message');
+        const progressBar = document.getElementById('progress-bar');
+        
+        messageElement.textContent = message;
         notification.style.display = 'block';
+        
+        // Reset animation
+        progressBar.style.animation = 'none';
+        void progressBar.offsetWidth;  // Trigger reflow
+        progressBar.style.animation = `progressBar ${duration}ms linear forwards`;
 
+        // Ẩn sau khi hết thời gian
         setTimeout(() => {
             notification.style.display = 'none';
         }, duration);

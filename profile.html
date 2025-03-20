@@ -1,54 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Google Maps Clone</title>
-    <link rel="icon" type="image/x-icon" href="/img/logo.jpg" />
 
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://js.api.here.com/v3/3.1/mapsjs-ui.css"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Maps Clone</title>
+  <link rel="icon" type="image/x-icon" href="/img/logo.jpg" />
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/src/css/style.css" />
-  </head>
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+  <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
 
-  <body class="h-screen w-screen overflow-hidden">
-    <div id="map" style="width: 100%; height: 500px"></div>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/src/css/style.css" />
+</head>
 
-    <script>
-      // Thay YOUR_API_KEY bằng API Key của bạn từ HERE
-      var platform = new H.service.Platform({
-        apikey: "QYPopTQhjQttlIWD-fe16IJ1ESMyb7xPLQrxJOr4EVE",
-      });
+<body class="h-screen w-screen overflow-hidden">
+  <div id="map" style="width: 100%; height: 500px"></div>
 
-      // Tạo một layer bản đồ
-      var defaultLayers = platform.createDefaultLayers();
+  <script>
+    // Thay YOUR_API_KEY bằng API Key của bạn từ HERE
+    var platform = new H.service.Platform({
+      apikey: "QYPopTQhjQttlIWD-fe16IJ1ESMyb7xPLQrxJOr4EVE",
+    });
 
-      // Khởi tạo bản đồ trong <div id="map">
-      var map = new H.Map(
-        document.getElementById("map"),
-        defaultLayers.vector.normal.map,
-        {
-          zoom: 10,
-          center: { lat: 21.0285, lng: 105.8544 }, // Hà Nội
-        }
-      );
+    // Tạo một layer bản đồ
+    var defaultLayers = platform.createDefaultLayers();
 
-      // Cho phép zoom và kéo bản đồ bằng chuột
-      var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+    // Khởi tạo bản đồ trong <div id="map">
+    var map = new H.Map(
+      document.getElementById("map"),
+      defaultLayers.vector.normal.map,
+      {
+        zoom: 10,
+        center: { lat: 21.0285, lng: 105.8544 }, // Hà Nội
+      }
+    );
 
-      // Thêm UI điều khiển
-      var ui = H.ui.UI.createDefault(map, defaultLayers);
-    </script>
+    // Cho phép zoom và kéo bản đồ bằng chuột
+    var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
-    <!-- Custom JS -->
-    <script src="/src/js/main.js"></script>
-  </body>
+    // Thêm UI điều khiển
+    var ui = H.ui.UI.createDefault(map, defaultLayers);
+  </script>
+
+  <!-- Custom JS -->
+  <script src="/src/js/main.js"></script>
+</body>
+
 </html>

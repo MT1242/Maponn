@@ -1,0 +1,104 @@
+@extends('layout.main')
+
+@section('css')
+    <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+@endsection
+
+@section('home-content')
+    <div id="map" style="width: 100%; height: 88vh"></div>
+@endsection
+
+@section('js')
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var platform = new H.service.Platform({
+                apikey: "QYPopTQhjQttlIWD-fe16IJ1ESMyb7xPLQrxJOr4EVE",
+            });
+            var defaultLayers = platform.createDefaultLayers();
+            var mapContainer = document.getElementById("map");
+            if (!mapContainer) {
+                console.error("Phần tử 'map' không tồn tại!");
+                return;
+            }
+            var map = new H.Map(
+                mapContainer,
+                defaultLayers.vector.normal.map, {
+                    zoom: 14,
+                    center: {
+                        lat: 21.0285,
+                        lng: 105.8544
+                    },
+                }
+            );
+            var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+            var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+            // Lấy vị trí hiện tại và di chuyển trung tâm
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const currentPosition = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map.setCenter(currentPosition);
+                }, function(error) {
+                    console.error("Không thể lấy vị trí hiện tại", error);
+                });
+            } else {
+                console.warn('Trình duyệt không hỗ trợ Geolocation.');
+            }
+
+            var regions = @json($regions);
+            if (!regions || regions.length === 0) {
+                console.warn('Không có vùng nào được tìm thấy!');
+                return;
+            }
+            console.log('Regions:', regions);
+
+            regions.forEach(region => {
+                try {
+                    var coordinates = JSON.parse(region.coordinates);
+                    if (!Array.isArray(coordinates) || coordinates.length === 0) {
+                        console.warn('Tọa độ trống:', region);
+                        return;
+                    }
+
+                    var lineString = new H.geo.LineString();
+                    coordinates.forEach(coord => {
+                        lineString.pushPoint({
+                            lat: coord.lat,
+                            lng: coord.lng
+                        });
+                    });
+
+                    // Thêm polygon với viền đậm hơn và trong suốt một chút
+                    var polygon = new H.map.Polygon(new H.geo.Polygon(lineString), {
+                        style: {
+                            fillColor: region.color || 'rgba(9, 215, 109, 0.2)',
+                        }
+                    });
+
+
+                    let coordText = coordinates.map(coord => `(${coord.lat}, ${coord.lng})`).join('<br>');
+                    polygon.setData(
+                        `<h4>${region.name}</h4><p>${region.area}</p>${region.description}<h5>Tọa độ:</h5><p>${coordText}</p>`
+                        );
+                    polygon.addEventListener('tap', function(evt) {
+                        var bubble = new H.ui.InfoBubble(evt.target.getGeometry().getExterior()
+                            .getBounds().getCenter(), {
+                                content: evt.target.getData()
+                            });
+                        ui.addBubble(bubble);
+                    });
+                    map.addObject(polygon);
+                } catch (e) {
+                    console.error('Lỗi khi vẽ vùng:', e, region);
+                }
+            });
+        });
+    </script>
+@endsection

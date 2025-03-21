@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LeafletJS - Vùng 10 điểm</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            width: 100%;
+            height: 90vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Tọa độ trung tâm mặc định
+        const initialLat = 21.0285;
+        const initialLng = 105.8544;
+        const zoomLevel = 16;
+
+        // Khởi tạo bản đồ với Leaflet
+        const map = L.map('map').setView([initialLat, initialLng], zoomLevel);
+
+        // Thêm lớp gạch OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: ''
+        }).addTo(map);
+
+        // Ẩn logo Leaflet
+        map.attributionControl.setPrefix('');
+
+        // Tạo 10 tọa độ điểm ngẫu nhiên quanh vị trí ban đầu
+        const coordinates = Array.from({ length: 10 }, () => [
+            initialLat + (Math.random() - 0.5) * 0.01,
+            initialLng + (Math.random() - 0.5) * 0.01
+        ]);
+
+        console.log("Tọa độ các điểm:", coordinates);
+
+        // Vẽ đa giác từ các tọa độ này
+        const polygon = L.polygon(coordinates, {
+            color: 'blue',       // Màu viền
+            weight: 3,           // Độ dày viền
+            fillColor: 'lightblue',  // Màu nền
+            fillOpacity: 0.5     // Độ trong suốt
+        }).addTo(map);
+
+        // Phóng đến vùng chứa đa giác
+        map.fitBounds(polygon.getBounds());
+
+        // Hiển thị từng marker tại mỗi điểm
+        coordinates.forEach((coord, index) => {
+            L.marker(coord).addTo(map)
+                .bindPopup(`Điểm ${index + 1}: [${coord[0].toFixed(6)}, ${coord[1].toFixed(6)}]`);
+        });
+    </script>
+</body>
+</html>
